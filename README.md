@@ -1,174 +1,369 @@
+
 # Warehouse Intelligence
+### Digital Twin & Warehouse Operations Analytics
 
-**Warehouse operations analytics and digital twin**
+<p align="center">
+  <strong>See every zone. Understand every movement. Control every operation.</strong>
+</p>
 
-Warehouse Intelligence is a local Streamlit application for exploring inventory, warehouse capacity and operational exceptions. It includes a 2D floor plan and a procedural Three.js view that share rack selection and display inventory details from the active dataset.
+---
 
-The app includes a built-in demo dataset and supports uploaded inventory CSV files. The warehouse layout and equipment movement are visual models used to explore the operational data.
+## Overview
 
-## Features
+Warehouse Intelligence is an interactive warehouse operations and inventory analytics application built to help warehouse managers monitor inventory, analyze storage capacity, identify operational risks, and explore warehouse layouts through interactive 2D and 3D visualizations.
 
-- Executive KPIs, warehouse summaries and Plotly charts.
-- Inventory status, ageing and ABC classification.
-- CSV upload with automatic column suggestions and manual mapping.
-- Interactive 2D floor plan and 3D warehouse scene.
-- Rack selection shared between the 2D and 3D views.
-- Rack-level capacity, utilization, SKU and inventory-value details.
-- Inbound, outbound and exception analysis when the selected source contains those records.
-- Simulated equipment activity, local report generation and optional manual webhook testing.
-- CSV exports, a sample inventory file, automated tests and Power BI starter assets.
+The application combines data analytics, inventory intelligence, warehouse visualization, and operational monitoring in one platform.
 
-## Requirements
+It supports both sample datasets and user-uploaded CSV files, allowing users to explore warehouse performance through an interactive dashboard.
 
-- Windows 10 or 11
-- Python 3.10 or later
-- Internet access for the first dependency installation and the Three.js browser modules
-- A modern browser with WebGL enabled for the 3D scene
+## Key Features
 
-The 2D floor plan does not require WebGL. Three.js is loaded from `esm.sh`; the 3D scene requires an internet connection when opened.
+### 1. Executive Command Center
+- Total inventory units and inventory value
+- Active SKU monitoring
+- Warehouse capacity utilization
+- Low-stock and out-of-stock monitoring
+- Inventory value analysis
+- Warehouse performance overview
 
-## Run on Windows
+### 2. Inventory Intelligence
+- ABC inventory classification
+- Inventory ageing analysis
+- Slow-moving and non-moving stock identification
+- Reorder-level monitoring
+- Safety-stock analysis
+- SKU-level inventory valuation
+- Category-wise inventory analysis
 
-1. Extract this folder to a location where you have write access.
-2. Install Python and enable **Add Python to PATH** in the installer.
-3. Double-click `run_windows.bat`.
-4. Open `http://localhost:8501` in your browser.
+### 3. Interactive 2D Warehouse Floor Plan
+- Warehouse zone visualization
+- Rack-level selection
+- Storage occupancy indicators
+- Rack-level inventory details
+- Search and location highlighting
 
-The launcher creates `.venv` when needed, installs the requirements and starts Streamlit through `python -m streamlit`. Keep the terminal open while using the application. Press `Ctrl+C` in that terminal to stop it.
+### 4. 3D Warehouse Digital Twin
+- Interactive 3D warehouse environment
+- Camera rotation, zoom and navigation
+- Rack selection and highlighting
+- Warehouse structure visualization
+- Rack-level information panel
+- Synchronized 2D and 3D selection
 
-### PowerShell
+### 5. Rack & Bin Explorer
+- Warehouse-to-rack hierarchy
+- Rack capacity and occupancy
+- SKU-level storage information
+- Inventory value by location
+- Stock status and ageing details
 
-Run these commands from the project folder:
+### 6. Inbound & Outbound Operations
+- Inbound receipt monitoring
+- Expected vs. received units
+- Outbound order analysis
+- Dispatch performance
+- Fulfilment metrics
 
-```powershell
-py -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m streamlit run app.py
-```
+### 7. Risk & Exception Management
+- Low-stock alerts
+- Out-of-stock identification
+- Slow-moving inventory alerts
+- Storage capacity warnings
+- Operational exception monitoring
 
-If `.venv` already exists, skip the first command.
+### 8. Space Optimization
+- Warehouse capacity analysis
+- Zone-wise utilization
+- Rack occupancy comparison
+- Available storage capacity
+- Underutilized and overcrowded locations
 
-## Load the sample CSV
+### 9. Workforce & Equipment
+- Equipment activity visualization
+- Forklift movement scenarios
+- Operational simulation
+- Equipment activity monitoring
 
-A test file is included at `data/sample_inventory.csv`.
+### 10. Insights & Recommendations
+- Rule-based warehouse insights
+- Inventory health recommendations
+- Stock and capacity risk identification
+- Data-driven operational suggestions
 
-1. Start the app and select **Upload CSV** in the sidebar.
-2. Choose `data/sample_inventory.csv`.
-3. Review the suggested mappings. The required fields are warehouse, SKU and quantity.
-4. Click **Apply mapping and load data**.
-5. Check the Command Center, Inventory Intelligence, Rack & Bin Explorer and Digital Twin pages.
+### 11. Data Explorer
+- CSV upload and column mapping
+- Data quality checks
+- Missing-value analysis
+- Duplicate record identification
+- Downloadable reports
 
-The sample contains 144 inventory rows, three warehouses and 36 rack locations. It includes zero-stock, low-stock and ageing cases for validation. It is a sample dataset for testing the upload and analytics workflow.
+---
 
-## Use your own data
+## Technology Stack
 
-A single inventory CSV must contain at least:
+| Technology | Purpose |
+|---|---|
+| Python | Application logic |
+| Streamlit | Web application |
+| Pandas | Data processing and analysis |
+| NumPy | Numerical calculations |
+| Plotly | Interactive analytics and charts |
+| HTML5 | Interface structure |
+| CSS3 | UI styling |
+| JavaScript | Frontend interactions |
+| Three.js | 3D warehouse visualization |
+| SQL | Database design |
+| Power BI | Business intelligence integration |
+| DAX | Analytical measures |
+| Pytest | Application testing |
 
-| Field | Required | Example column names |
-|---|---|---|
-| Warehouse or location | Yes | `warehouse_id`, `warehouse`, `location` |
-| SKU or product ID | Yes | `sku_id`, `sku`, `product_id` |
-| Quantity on hand | Yes | `quantity_on_hand`, `quantity`, `stock` |
-| Unit cost or inventory value | No | `unit_cost`, `inventory_value` |
-| Category and product name | No | `category`, `product_name` |
-| Rack and zone | No | `rack_id`, `zone_id` |
-| Last movement date | No | `last_movement_date` |
-| Reorder and safety stock | No | `reorder_level`, `safety_stock` |
-| Rack or warehouse capacity | No | `rack_capacity`, `warehouse_capacity` |
+---
 
-Original CSV files are read but not modified. The mapping step creates a normalized in-memory model. If a field is unavailable, the affected KPI or view is shown as unavailable rather than inferred.
-
-When switching between demo data and a newly uploaded CSV, the app clears selections that belonged to the previous source. Use **Reset all filters** to restore the current source's full scope at any time.
-
-## Project structure
+## Project Architecture
 
 ```text
-warehouse-intelligence/
+Data Sources
+    |
+    ├── Sample Warehouse Dataset
+    |
+    └── Uploaded CSV Files
+            |
+            v
+    Data Processing Layer
+       Python / Pandas
+            |
+            v
+      Analytics Engine
+       KPI Calculations
+       Inventory Analysis
+       Risk Detection
+            |
+            v
+     Warehouse Intelligence
+            |
+     ├── Executive Dashboard
+     ├── Inventory Intelligence
+     ├── 2D Floor Plan
+     ├── 3D Digital Twin
+     ├── Operations Analytics
+     ├── Risk Management
+     └── Insights & Reports
+```
+
+---
+
+## Repository Structure
+
+```text
+warehouse-intelligence-digital-twin/
+│
 ├── app.py
 ├── digital_twin.py
+├── requirements.txt
+├── requirements-dev.txt
+├── README.md
+├── run_windows.bat
+├── .gitignore
+├── .env.example
+│
+├── .streamlit/
+│   └── config.toml
+│
+├── data/
+│   └── sample_inventory.csv
+│
 ├── static/
 │   ├── digital_twin.html
 │   ├── digital_twin.css
 │   ├── floorplan.js
 │   └── three_scene.js
-├── data/
-│   └── sample_inventory.csv
+│
 ├── database/
 │   └── schema.sql
+│
 ├── docs/
+│   ├── screenshots/
+│   ├── ARCHITECTURE.md
+│   ├── DATA_DICTIONARY.md
+│   ├── KPI_DEFINITIONS.md
+│   └── USER_GUIDE.md
+│
 ├── powerbi/
-├── tests/
-├── requirements.txt
-├── requirements-dev.txt
-├── pytest.ini
-└── run_windows.bat
+│   ├── measures.dax
+│   ├── data-model.md
+│   └── power-query-notes.md
+│
+└── tests/
 ```
 
-`app.py` contains the Streamlit pages, demo data, CSV mapping and analytics. `digital_twin.py` prepares rack records and combines the static HTML, CSS and JavaScript assets.
+---
 
-- `docs/GITHUB_PUBLISH_GUIDE.md` — repository setup and Streamlit deployment.
+## Installation & Setup
 
-## Tests
+### Prerequisites
 
-Install the development dependencies and run the tests from the project folder:
+- Python 3.10 or later
+- Git
+- Visual Studio Code (recommended)
+- Internet connection for installing dependencies and loading the 3D visualization
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/shubh200405-coder/warehouse-intelligence-digital-twin.git
+```
+
+### 2. Navigate to the Project
+
+```bash
+cd warehouse-intelligence-digital-twin
+```
+
+### 3. Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+### 4. Activate the Environment
+
+Windows PowerShell:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv\Scripts\python.exe -m pytest -q
+.venv\Scripts\Activate.ps1
 ```
 
-The tests cover demo data relationships, uploaded CSV mapping, rack metrics, filter-state reset and digital-twin content generation.
+### 5. Install Dependencies
 
-## KPI definitions
+```bash
+pip install -r requirements.txt
+```
 
-- **Inventory value:** quantity on hand × unit cost, or the source-provided inventory value.
-- **Capacity utilization:** occupied units ÷ capacity units × 100.
-- **Low stock:** distinct SKUs at or below reorder level.
-- **Out of stock:** quantity on hand less than or equal to zero.
-- **Ageing:** days since the last recorded movement, not assumed purchase age.
-- **Non-moving value:** inventory value where no movement is recorded for more than 90 days.
-- **Receiving completion:** received units ÷ expected units × 100.
-- **Fulfilment:** dispatched units ÷ ordered units × 100.
-- **ABC classification:** SKUs sorted by value; A through 80% cumulative value, B through 95%, C for the remainder.
+### 6. Run the Application
 
-Turnover, DIO, XYZ, picking accuracy and OTIF require additional source fields and are not calculated from an inventory-only CSV.
+```bash
+python -m streamlit run app.py
+```
 
-## Integrations and limitations
+### 7. Open in Browser
 
-- **PostgreSQL:** `database/schema.sql` is a reference schema. The app does not connect to or modify a database.
-- **AI:** insights are calculated locally using business rules. No Claude or OpenAI API is called.
-- **n8n:** the Automation Center offers an optional manual webhook test. No scheduled workflow is configured.
-- **Power BI:** `powerbi/` contains a model outline, starter DAX measures and Power Query notes. No PBIX file is included.
-- **Digital twin:** the warehouse structure is procedural and illustrative. It is not a verified CAD drawing, live sensor feed or equipment controller.
-- **Operations data:** inbound, outbound and movement analytics are available in demo mode. They are not inferred from an inventory-only upload.
+```text
+http://localhost:8501
+```
 
-## Documentation
+---
 
-- `docs/PROJECT_AUDIT.md` — repository review and current scope.
-- `docs/ARCHITECTURE.md` — application flow and component boundaries.
-- `docs/DATA_DICTIONARY.md` — normalized fields.
-- `docs/KPI_DEFINITIONS.md` — formulas and data requirements.
-- `docs/USER_GUIDE.md` — common workflows.
-- `docs/UPGRADE_NOTES.md` — changes in this project version.
-- `docs/PROJECT_EXPLANATION_HINGLISH.md` — end-to-end project walkthrough in Hinglish.
-- `docs/VIDEO_OVERVIEW_SCRIPT_HINGLISH.md` — a natural script for a short project demo video.
+## Working with CSV Data
 
-## GitHub summary
+The application supports CSV-based inventory analysis.
 
-Interactive warehouse analytics application with inventory intelligence, rack-level drill-down, synchronized 2D/3D visualization, exception monitoring and simulated equipment activity.
+The inventory dataset can include fields such as:
 
-## Deploy on Streamlit Community Cloud
+| Column | Description |
+|---|---|
+| warehouse | Warehouse identifier |
+| sku | Product identifier |
+| quantity | Available stock quantity |
+| category | Product category |
+| unit_cost | Cost per unit |
+| zone | Warehouse storage zone |
+| rack | Rack identifier |
+| reorder_level | Stock reorder threshold |
+| safety_stock | Minimum safety stock |
+| last_movement_date | Last inventory movement date |
+| capacity_units | Rack storage capacity |
 
-This repository is structured for deployment from its root directory. The Streamlit entry point is `app.py`, and Python dependencies are declared in the root `requirements.txt`.
+Users can upload their own inventory CSV and map the uploaded columns to the application's standard fields.
 
-1. Push this project to a GitHub repository.
-2. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/) with GitHub.
-3. Select **Create app** and choose this repository.
-4. Set the branch to `main` and the main file path to `app.py`.
-5. Choose an available app subdomain and select **Deploy**.
+The availability of individual analytics depends on the columns provided.
 
-The app needs the files in `static/` and `data/` to remain in the repository. The 3D scene loads its Three.js modules from a browser CDN, so the 3D view requires an internet connection.
+---
 
-Do not commit `.env`, `.streamlit/secrets.toml`, API keys, passwords, customer data, or private warehouse exports. The included `data/sample_inventory.csv` is synthetic test data and is safe to use as the public demo file. Configure any future credentials through the hosting platform's secrets settings.
+## Key KPI Definitions
 
-After deployment, pushing commits to the selected GitHub branch triggers an app update.
+| KPI | Calculation |
+|---|---|
+| Inventory Value | Quantity × Unit Cost |
+| Total Inventory Units | Sum of Quantity on Hand |
+| Capacity Utilization | Occupied Units / Total Capacity × 100 |
+| Low Stock SKUs | Distinct SKUs at or below reorder level |
+| Out-of-Stock SKUs | Distinct SKUs with zero or negative stock |
+| Inventory Ageing | Days Since Last Movement |
+| Dead Stock Value | Value of inventory with no movement beyond the configured threshold |
+| Receiving Completion | Received Units / Expected Units × 100 |
+| Fulfilment Rate | Dispatched Units / Ordered Units × 100 |
+
+All calculations depend on the availability and quality of the underlying data.
+
+---
+
+## Screenshots
+
+Screenshots of the application will be available in:
+
+```text
+docs/screenshots/
+```
+
+Planned screenshots:
+
+| Screenshot | Description |
+|---|---|
+| command-center.png | Executive dashboard |
+| inventory-intelligence.png | Inventory analytics |
+| 2d-floor-plan.png | Interactive warehouse floor plan |
+| 3d-digital-twin.png | 3D warehouse visualization |
+| risk-center.png | Warehouse alerts |
+| data-explorer.png | CSV upload and data analysis |
+
+---
+
+## Data & Integration Notes
+
+- The included sample dataset is synthetic.
+- Uploaded CSV files are analyzed according to their available columns.
+- Equipment movements are simulated scenarios, not live equipment tracking.
+- The 3D warehouse is a visualization model, not a connection to physical warehouse infrastructure.
+- Insights are generated through rule-based calculations.
+- External AI services and workflow automation require separate configuration.
+- PostgreSQL integration is a potential extension and should not be assumed to be active.
+
+---
+
+## Future Enhancements
+
+- PostgreSQL database integration
+- FastAPI-based analytics services
+- Advanced warehouse location optimization
+- Live warehouse data integration
+- AI-powered warehouse assistant
+- n8n workflow automation
+- Advanced inventory forecasting
+- Equipment telemetry integration
+- Enhanced 3D warehouse models
+- Power BI reporting integration
+
+---
+
+## Author
+
+**Shubh Srivastava**
+
+Data Analytics | Python | SQL | Power BI | Business Intelligence
+
+- **GitHub:** [shubh200405-coder](https://github.com/shubh200405-coder)
+- **LinkedIn:** [Shubh Srivastava](https://www.linkedin.com/in/shubh-srivastava0520/)
+- **Email:** [shubh200405@gmail.com](mailto:shubh200405@gmail.com)
+
+---
+
+## License
+
+This project is intended for educational, portfolio, and demonstration purposes.
+
+---
+
+<p align="center">
+  <strong>Warehouse Intelligence</strong><br>
+  Turning Warehouse Data into Operational Insights.
+</p>

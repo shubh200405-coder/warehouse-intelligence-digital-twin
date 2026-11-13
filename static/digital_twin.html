@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>__DIGITAL_TWIN_CSS__</style>
+</head>
+<body>
+  <main class="twin-shell">
+    <header class="twin-top">
+      <div>
+        <div class="twin-name">
+          WAREHOUSE DIGITAL TWIN
+          <span style="color:#4cc8e8">/</span>
+          __WAREHOUSE_NAME__
+        </div>
+        <div class="twin-sub">Rack layout · Inventory details · Shared selection</div>
+      </div>
+      <span class="demo-tag">WAREHOUSE MODEL</span>
+    </header>
+
+    <div class="controls __VIEW_CLASS__" style="margin-bottom:10px">
+      <input id="skuSearch" type="search" placeholder="Search SKU or rack ID…" aria-label="Search SKU or rack">
+      <select id="heatMode" aria-label="Heatmap mode">
+        <option value="occupancy">Occupancy heatmap</option>
+        <option value="value">Inventory value heatmap</option>
+        <option value="status">Stock status</option>
+      </select>
+      <button id="resetCamera" type="button">Reset camera</button>
+      <button id="focusRack" type="button">Focus selected</button>
+      <button id="playForklift" type="button">Play forklift</button>
+      <button id="pauseForklift" type="button">Pause</button>
+      <select id="simSpeed" aria-label="Simulation speed">
+        <option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option>
+        <option value="2">2×</option>
+        <option value="4">4×</option>
+      </select>
+      <div class="toggle-line">
+        <label><input id="showIds" type="checkbox" checked> Rack IDs</label>
+        <label><input id="showPaths" type="checkbox"> Flow paths</label>
+      </div>
+    </div>
+
+    <div class="views __VIEW_CLASS__" id="viewsGrid">
+      <section class="view-card" id="floorCard">
+        <div class="view-head">
+          <strong>2D FLOOR PLAN</strong>
+          <span>Click a rack to inspect</span>
+        </div>
+        <div class="floor-wrap" id="floorWrap">
+          <svg id="floorSvg" viewBox="0 0 1000 560" role="img" aria-label="Interactive warehouse floor plan"></svg>
+        </div>
+      </section>
+      <section class="view-card" id="sceneCard" __SCENE_STYLE__>
+        <div class="view-head">
+          <strong>3D DIGITAL TWIN</strong>
+          <span>Drag to orbit · scroll to zoom</span>
+        </div>
+        <div class="scene-wrap">
+          <div id="threeMount"></div>
+          <div class="scene-message" id="sceneStatus">Loading interactive 3D scene…</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#35c48b"></i>Healthy</span>
+      <span><i class="dot" style="background:#f5b942"></i>High utilization</span>
+      <span><i class="dot" style="background:#f36b74"></i>Critical</span>
+      <span><i class="dot" style="background:#63758b"></i>Empty</span>
+      <span><i class="dot" style="background:#47c7e8"></i>Selected</span>
+      <span style="margin-left:auto">__RACK_COUNT__ racks in current filtered scope</span>
+    </div>
+
+    <section class="detail-card">
+      <div class="detail-head">
+        <div>
+          <div class="detail-title" id="detailTitle">Select a rack</div>
+          <div class="twin-sub" id="detailLocation">Choose a rack in either view to synchronize its details.</div>
+        </div>
+        <span class="status" id="detailStatus">Awaiting selection</span>
+      </div>
+      <div class="detail-grid" id="detailMetrics">
+        <div class="metric"><label>Capacity</label><b>—</b></div>
+        <div class="metric"><label>Occupied</label><b>—</b></div>
+        <div class="metric"><label>Available</label><b>—</b></div>
+        <div class="metric"><label>Utilization</label><b>—</b></div>
+        <div class="metric"><label>Inventory value</label><b>—</b></div>
+        <div class="metric"><label>SKU count</label><b>—</b></div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>SKU</th><th>Product</th><th>Category</th><th>Qty</th>
+              <th>Value</th><th>Days idle</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="skuRows">
+            <tr><td colspan="7" class="empty">No rack selected yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hint">Select a rack to view its inventory and capacity.</p>
+    </section>
+  </main>
+
+  <script>
+    window.WH_RACKS = __RACK_DATA__;
+    __FLOORPLAN_SCRIPT__
+  </script>
+  __THREE_SCRIPT__
+</body>
+</html>

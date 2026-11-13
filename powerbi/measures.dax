@@ -1,0 +1,41 @@
+// Starter measures for a future Power BI model.
+// Expected model: FactInventorySnapshot, DimProduct, DimWarehouse, DimLocation.
+Total Inventory Units = SUM(FactInventorySnapshot[quantity_on_hand])
+
+Inventory Value =
+SUMX(
+    FactInventorySnapshot,
+    FactInventorySnapshot[quantity_on_hand] * RELATED(DimProduct[unit_cost])
+)
+
+Active SKUs = DISTINCTCOUNT(FactInventorySnapshot[sku_id])
+
+Low Stock SKUs =
+CALCULATE(
+    DISTINCTCOUNT(FactInventorySnapshot[sku_id]),
+    FILTER(
+        FactInventorySnapshot,
+        NOT ISBLANK(FactInventorySnapshot[reorder_level]) &&
+        FactInventorySnapshot[quantity_on_hand] <= FactInventorySnapshot[reorder_level]
+    )
+)
+
+Out of Stock SKUs =
+CALCULATE(
+    DISTINCTCOUNT(FactInventorySnapshot[sku_id]),
+    FactInventorySnapshot[quantity_on_hand] <= 0
+)
+
+Storage Capacity Units = SUM(DimLocation[capacity_units])
+
+Capacity Utilization % = DIVIDE([Total Inventory Units], [Storage Capacity Units])
+
+Non-Moving Inventory Value =
+CALCULATE(
+    [Inventory Value],
+    FILTER(
+        FactInventorySnapshot,
+        NOT ISBLANK(FactInventorySnapshot[last_movement_date]) &&
+        DATEDIFF(FactInventorySnapshot[last_movement_date], TODAY(), DAY) > 90
+    )
+)
